@@ -18,8 +18,12 @@ public final class RootFlow {
     
     // MARK: - Private Properties - View Controllers
     
+    /// The root view controller.
+    /// Holding onto a reference can be useful to unwind the navigation stack on dismissal.
     private lazy var masterViewController = MasterViewController(delegate: self)
-    private lazy var detailViewController = DetailViewController(delegate: self)
+    
+    /// A detail view controller is created as required. Keeping a reference is optional.
+    private weak var detailViewController: DetailViewController? = nil
     
     // MARK: - Initialization
     
@@ -43,7 +47,9 @@ public final class RootFlow {
 
 extension RootFlow: MasterViewControllerDelegate {
     public func masterViewControllerShowDetails(_ viewController: MasterViewController) {
-        self.navigationController.pushViewController(self.detailViewController, animated: true)
+        let detailViewController = DetailViewController(delegate: self)
+        self.detailViewController = detailViewController
+        self.navigationController.pushViewController(detailViewController, animated: true)
     }
 }
 
